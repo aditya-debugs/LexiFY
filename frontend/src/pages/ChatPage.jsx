@@ -202,6 +202,70 @@ const ChatPage = () => {
     return () => observer.disconnect();
   }, [channel]);
 
+  // Add Join Call buttons to video call messages
+  useEffect(() => {
+    if (!messageListRef.current) return;
+
+    const addJoinCallButtons = () => {
+      const messages = messageListRef.current.querySelectorAll(
+        ".str-chat__message-simple, .str-chat__message--me, .str-chat__message--other"
+      );
+
+      messages.forEach((messageEl) => {
+        if (messageEl.dataset.callButtonAdded) return;
+
+        const textEl = messageEl.querySelector(
+          ".str-chat__message-text-inner, .str-chat__message-text"
+        );
+        if (!textEl) return;
+
+        const messageText = textEl.textContent || "";
+
+        // Check if message contains video call link
+        if (
+          messageText.includes("📹 Video call started") &&
+          messageText.includes("/call/")
+        ) {
+          messageEl.dataset.callButtonAdded = "true";
+
+          // Extract call ID from message
+          const urlMatch = messageText.match(/\/call\/([^\s]+)/);
+          if (!urlMatch) return;
+
+          const callId = urlMatch[1];
+
+          // Create join button
+          const joinBtn = document.createElement("button");
+          joinBtn.className = "btn btn-primary btn-sm mt-2 gap-2";
+          joinBtn.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><path d="M14.05 2a9 9 0 0 1 8 7.94"></path><path d="M14.05 6A5 5 0 0 1 18 10"></path></svg> Join Video Call';
+          joinBtn.onclick = (e) => {
+            e.stopPropagation();
+            navigate(`/call/${callId}`);
+          };
+
+          // Append button after text
+          const contentWrapper = messageEl.querySelector(
+            ".str-chat__message-simple__content, .str-chat__message-bubble, .str-chat__message-text"
+          );
+          if (contentWrapper) {
+            contentWrapper.appendChild(joinBtn);
+          }
+        }
+      });
+    };
+
+    addJoinCallButtons();
+
+    const observer = new MutationObserver(addJoinCallButtons);
+    observer.observe(messageListRef.current, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
+  }, [channel, navigate]);
+
   const handleVideoCall = () => {
     if (channel) {
       const callUrl = `/call/${channel.id}`;
@@ -209,15 +273,9 @@ const ChatPage = () => {
       // Navigate to call page directly
       navigate(callUrl);
 
-      // Send custom message with call info
+      // Send message with call link
       channel.sendMessage({
-        text: `📞 Video call started`,
-        attachments: [
-          {
-            type: "video_call",
-            callId: channel.id,
-          },
-        ],
+        text: `📹 Video call started. Click to join: ${window.location.origin}${callUrl}`,
       });
 
       toast.success("Starting video call...");
