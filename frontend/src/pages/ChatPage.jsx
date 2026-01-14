@@ -366,10 +366,11 @@ const ChatPage = () => {
                   <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 flex gap-2">
                     <button
                       onClick={handleCreateGoal}
-                      className="btn btn-circle btn-sm bg-secondary hover:bg-secondary-focus text-secondary-content shadow-lg border-2 border-secondary transition-all hover:scale-105"
+                      className="btn btn-secondary btn-sm gap-2 shadow-lg transition-all hover:scale-105"
                       title="Create Learning Goal"
                     >
                       <Target className="w-4 h-4" />
+                      <span className="hidden sm:inline">Start a Goal</span>
                     </button>
                     <CallButton handleVideoCall={handleVideoCall} />
                   </div>

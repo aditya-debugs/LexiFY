@@ -98,19 +98,24 @@ const CallPage = () => {
       }
       toast.success("Call ended");
 
-      // Navigate back to chat
+      // Navigate back to chat using window.location to prevent auth issues
       // callId format is: "userId1-userId2" (sorted)
       const userIds = callId.split("-");
       const otherUserId = userIds.find((id) => id !== authUser._id);
 
-      if (otherUserId) {
-        navigate(`/chat/${otherUserId}`);
-      } else {
-        navigate("/"); // Fallback to home
-      }
+      // Use setTimeout to ensure cleanup completes before navigation
+      setTimeout(() => {
+        if (otherUserId) {
+          window.location.href = `/chat/${otherUserId}`;
+        } else {
+          window.location.href = "/";
+        }
+      }, 300);
     } catch (error) {
       console.error("Error leaving call:", error);
-      navigate("/"); // Fallback to home on error
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 300);
     }
   };
 
@@ -175,17 +180,19 @@ const CallContent = ({ onLeave }) => {
     if (callingState === CallingState.LEFT) {
       toast.info("Call ended");
 
-      // Navigate back to chat
+      // Navigate back to chat using window.location
       const userIds = callId.split("-");
       const otherUserId = userIds.find((id) => id !== authUser?._id);
 
-      if (otherUserId) {
-        navigate(`/chat/${otherUserId}`);
-      } else {
-        navigate("/"); // Fallback to home
-      }
+      setTimeout(() => {
+        if (otherUserId) {
+          window.location.href = `/chat/${otherUserId}`;
+        } else {
+          window.location.href = "/";
+        }
+      }, 500);
     }
-  }, [callingState, navigate, callId, authUser]);
+  }, [callingState, callId, authUser]);
 
   return (
     <StreamTheme className="h-full">
