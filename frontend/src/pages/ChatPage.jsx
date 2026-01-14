@@ -363,10 +363,10 @@ const ChatPage = () => {
             <Window>
               <div className="h-full flex flex-col">
                 <div className="flex-shrink-0 bg-base-200/80 backdrop-blur-md border-b border-base-300/50 relative">
-                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 flex gap-2">
+                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 flex flex-col sm:flex-row gap-2">
                     <button
                       onClick={handleCreateGoal}
-                      className="btn btn-secondary btn-sm gap-2 shadow-lg transition-all hover:scale-105"
+                      className="btn btn-secondary btn-sm gap-1 shadow-lg transition-all hover:scale-105"
                       title="Create Learning Goal"
                     >
                       <Target className="w-4 h-4" />
