@@ -5,7 +5,7 @@ import useLogin from "../hooks/useLogin";
 
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({
-    emailOrUsername: "",
+    email: "",
     password: "",
   });
 
@@ -48,11 +48,23 @@ const LoginPage = () => {
           {error && (
             <div className="alert alert-error mb-4 animate-shake">
               <div className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 <span className="text-sm font-medium">
-                  {error?.response?.data?.message || error?.message || "Login failed. Please try again."}
+                  {error?.response?.data?.message ||
+                    error?.message ||
+                    "Login failed. Please try again."}
                 </span>
               </div>
             </div>
@@ -62,7 +74,9 @@ const LoginPage = () => {
             <form onSubmit={handleLogin}>
               <div className="space-y-4">
                 <div className="text-center lg:text-left">
-                  <h2 className="text-xl sm:text-2xl font-semibold">Welcome Back</h2>
+                  <h2 className="text-xl sm:text-2xl font-semibold">
+                    Welcome Back
+                  </h2>
                   <p className="text-sm sm:text-base text-base-content/70 mt-1">
                     Sign in to your account to continue your language journey
                   </p>
@@ -71,14 +85,16 @@ const LoginPage = () => {
                 <div className="flex flex-col gap-3">
                   <div className="form-control w-full space-y-2">
                     <label className="label">
-                      <span className="label-text">Email or Username</span>
+                      <span className="label-text">Email</span>
                     </label>
                     <input
-                      type="text"
-                      placeholder="hello@example.com or username"
+                      type="email"
+                      placeholder="hello@example.com"
                       className="input input-bordered w-full"
-                      value={loginData.emailOrUsername}
-                      onChange={(e) => setLoginData({ ...loginData, emailOrUsername: e.target.value })}
+                      value={loginData.email}
+                      onChange={(e) =>
+                        setLoginData({ ...loginData, email: e.target.value })
+                      }
                       required
                     />
                   </div>
@@ -92,12 +108,18 @@ const LoginPage = () => {
                       placeholder="••••••••"
                       className="input input-bordered w-full"
                       value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                      onChange={(e) =>
+                        setLoginData({ ...loginData, password: e.target.value })
+                      }
                       required
                     />
                   </div>
 
-                  <button type="submit" className="btn btn-primary w-full" disabled={isPending}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary w-full"
+                    disabled={isPending}
+                  >
                     {isPending ? (
                       <>
                         <span className="loading loading-spinner loading-xs"></span>
@@ -111,7 +133,10 @@ const LoginPage = () => {
                   <div className="text-center mt-4">
                     <p className="text-sm">
                       Don't have an account?{" "}
-                      <Link to="/signup" className="text-primary hover:underline">
+                      <Link
+                        to="/signup"
+                        className="text-primary hover:underline"
+                      >
                         Create one
                       </Link>
                     </p>
@@ -127,13 +152,20 @@ const LoginPage = () => {
           <div className="max-w-md p-8">
             {/* Illustration */}
             <div className="relative aspect-square max-w-sm mx-auto">
-              <img src="/i.png" alt="Language connection illustration" className="w-full h-full" />
+              <img
+                src="/i.png"
+                alt="Language connection illustration"
+                className="w-full h-full"
+              />
             </div>
 
             <div className="text-center space-y-3 mt-6">
-              <h2 className="text-xl font-semibold">Connect with language partners worldwide</h2>
+              <h2 className="text-xl font-semibold">
+                Connect with language partners worldwide
+              </h2>
               <p className="opacity-70">
-                Practice conversations, make friends, and improve your language skills together
+                Practice conversations, make friends, and improve your language
+                skills together
               </p>
             </div>
           </div>
