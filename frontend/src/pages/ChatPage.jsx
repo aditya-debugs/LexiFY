@@ -83,10 +83,12 @@ const ChatPage = () => {
         setChatClient(client);
         setChannel(currChannel);
 
-        const chatHistory = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+        const chatHistory = JSON.parse(
+          localStorage.getItem("chatHistory") || "[]"
+        );
         if (!chatHistory.includes(targetUserId)) {
           chatHistory.push(targetUserId);
-          localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+          localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
         }
       } catch (error) {
         console.error("Error initializing chat:", error);
@@ -114,41 +116,54 @@ const ChatPage = () => {
 
     const addTranslateButtons = () => {
       // Select ALL messages - both sent and received
-      const messages = messageListRef.current.querySelectorAll('.str-chat__message-simple, .str-chat__message--me, .str-chat__message--other');
-      
+      const messages = messageListRef.current.querySelectorAll(
+        ".str-chat__message-simple, .str-chat__message--me, .str-chat__message--other"
+      );
+
       messages.forEach((messageEl) => {
         // Skip if button already exists (check both class and data attribute)
-        if (messageEl.querySelector('.translate-btn-custom') || messageEl.dataset.translateAdded) return;
-        
+        if (
+          messageEl.querySelector(".translate-btn-custom") ||
+          messageEl.dataset.translateAdded
+        )
+          return;
+
         // Find the text content
-        const textEl = messageEl.querySelector('.str-chat__message-text-inner, .str-chat__message-text');
+        const textEl = messageEl.querySelector(
+          ".str-chat__message-text-inner, .str-chat__message-text"
+        );
         if (!textEl || !textEl.textContent?.trim()) return;
-        
+
         // Mark this message as processed
-        messageEl.dataset.translateAdded = 'true';
+        messageEl.dataset.translateAdded = "true";
 
         const messageText = textEl.textContent.trim();
-        
+
         // Create translate button
-        const btn = document.createElement('button');
-        btn.className = 'translate-btn-custom btn btn-xs btn-circle bg-primary text-primary-content hover:bg-primary-focus shadow-lg border-2 border-primary';
-        btn.style.cssText = 'position: absolute; top: -8px; right: -8px; z-index: 10;';
-        btn.title = 'Translate to your native language';
-        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>';
-        
+        const btn = document.createElement("button");
+        btn.className =
+          "translate-btn-custom btn btn-xs btn-circle bg-primary text-primary-content hover:bg-primary-focus shadow-lg border-2 border-primary";
+        btn.style.cssText =
+          "position: absolute; top: -8px; right: -8px; z-index: 10;";
+        btn.title = "Translate to your native language";
+        btn.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>';
+
         btn.onclick = (e) => {
           e.stopPropagation();
           e.preventDefault();
-          handleTranslateMessage(messageText, 'msg-' + Date.now());
+          handleTranslateMessage(messageText, "msg-" + Date.now());
         };
 
         // Make message container position relative
-        messageEl.style.position = 'relative';
-        
+        messageEl.style.position = "relative";
+
         // Find the message content wrapper and append button there
-        const contentWrapper = messageEl.querySelector('.str-chat__message-simple__content, .str-chat__message-bubble');
+        const contentWrapper = messageEl.querySelector(
+          ".str-chat__message-simple__content, .str-chat__message-bubble"
+        );
         if (contentWrapper) {
-          contentWrapper.style.position = 'relative';
+          contentWrapper.style.position = "relative";
           contentWrapper.appendChild(btn);
         } else {
           messageEl.appendChild(btn);
@@ -156,16 +171,20 @@ const ChatPage = () => {
 
         // Show/hide on hover for desktop, always visible on mobile
         if (window.innerWidth >= 768) {
-          btn.style.opacity = '0';
-          btn.style.transition = 'opacity 0.2s ease';
-          
-          const showBtn = () => { btn.style.opacity = '1'; };
-          const hideBtn = () => { btn.style.opacity = '0'; };
-          
-          messageEl.addEventListener('mouseenter', showBtn);
-          messageEl.addEventListener('mouseleave', hideBtn);
+          btn.style.opacity = "0";
+          btn.style.transition = "opacity 0.2s ease";
+
+          const showBtn = () => {
+            btn.style.opacity = "1";
+          };
+          const hideBtn = () => {
+            btn.style.opacity = "0";
+          };
+
+          messageEl.addEventListener("mouseenter", showBtn);
+          messageEl.addEventListener("mouseleave", hideBtn);
         } else {
-          btn.style.opacity = '1';
+          btn.style.opacity = "1";
         }
       });
     };
@@ -185,13 +204,17 @@ const ChatPage = () => {
 
   const handleVideoCall = () => {
     if (channel) {
-      const callUrl = `${window.location.origin}/call/${channel.id}`;
+      const callUrl = `/call/${channel.id}`;
 
+      // Navigate to call page directly
+      navigate(callUrl);
+
+      // Also send message in chat
       channel.sendMessage({
-        text: `I've started a video call. Join me here: ${callUrl}`,
+        text: `📞 Video call started. Click to join: ${window.location.origin}${callUrl}`,
       });
 
-      toast.success("Video call link sent successfully!");
+      toast.success("Starting video call...");
     }
   };
 
@@ -203,7 +226,7 @@ const ChatPage = () => {
     const targetLanguage = authUser?.nativeLanguage || "English";
 
     const cachedTranslation = translationCache.get(text, targetLanguage);
-    
+
     if (cachedTranslation) {
       setTranslationModal({
         isOpen: true,
@@ -238,10 +261,11 @@ const ChatPage = () => {
       });
     } catch (error) {
       console.error("Translation error:", error);
-      
-      const errorMessage = error.response?.data?.message || 
-                          error.message || 
-                          "Failed to translate message. Please try again.";
+
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to translate message. Please try again.";
 
       setTranslationModal({
         isOpen: true,
@@ -288,7 +312,10 @@ const ChatPage = () => {
                   <ChannelHeader />
                 </div>
 
-                <div ref={messageListRef} className="flex-1 min-h-0 overflow-hidden">
+                <div
+                  ref={messageListRef}
+                  className="flex-1 min-h-0 overflow-hidden"
+                >
                   <MessageList />
                 </div>
 

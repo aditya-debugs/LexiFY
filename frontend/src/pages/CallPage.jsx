@@ -37,7 +37,7 @@ const CallPage = () => {
 
   useEffect(() => {
     const initCall = async () => {
-      if (!tokenData.token || !authUser || !callId) return;
+      if (!tokenData?.token || !authUser || !callId) return;
 
       try {
         console.log("Initializing Stream video client...");
@@ -90,10 +90,7 @@ const CallPage = () => {
               <p className="text-lg sm:text-xl mb-4">
                 Could not initialize call. Please refresh or try again later.
               </p>
-              <button 
-                className="btn btn-primary"
-                onClick={() => navigate("/")}
-              >
+              <button className="btn btn-primary" onClick={() => navigate("/")}>
                 Go Home
               </button>
             </div>

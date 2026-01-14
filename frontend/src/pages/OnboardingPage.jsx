@@ -3,7 +3,13 @@ import useAuthUser from "../hooks/useAuthUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { completeOnboarding } from "../lib/api";
-import { CameraIcon, LoaderIcon, MapPinIcon, ShipWheelIcon, ShuffleIcon } from "lucide-react";
+import {
+  CameraIcon,
+  LoaderIcon,
+  MapPinIcon,
+  ShipWheelIcon,
+  ShuffleIcon,
+} from "lucide-react";
 import { LANGUAGES } from "../constants";
 
 const OnboardingPage = () => {
@@ -39,9 +45,19 @@ const OnboardingPage = () => {
 
   const handleRandomAvatar = () => {
     // Generate random avatar using DiceBear API
-    const avatarStyles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'lorelei', 'micah', 'personas', 'pixel-art'];
-    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
-    const seed = (authUser?.username || 'user') + Date.now();
+    const avatarStyles = [
+      "adventurer",
+      "avataaars",
+      "bottts",
+      "fun-emoji",
+      "lorelei",
+      "micah",
+      "personas",
+      "pixel-art",
+    ];
+    const randomStyle =
+      avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    const seed = (authUser?.username || "user") + Date.now();
     const randomAvatar = `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${seed}`;
 
     setFormState({ ...formState, profilePic: randomAvatar });
@@ -76,13 +92,15 @@ const OnboardingPage = () => {
 
               {/* Generate Random Avatar BTN */}
               <div className="flex items-center gap-2">
-                <button 
-                  type="button" 
-                  onClick={handleRandomAvatar} 
+                <button
+                  type="button"
+                  onClick={handleRandomAvatar}
                   className="btn btn-accent btn-sm sm:btn-md"
                 >
                   <ShuffleIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                  <span className="text-xs sm:text-sm">Generate Random Avatar</span>
+                  <span className="text-xs sm:text-sm">
+                    Generate Random Avatar
+                  </span>
                 </button>
               </div>
             </div>
@@ -90,13 +108,17 @@ const OnboardingPage = () => {
             {/* FULL NAME */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-sm sm:text-base">Full Name</span>
+                <span className="label-text text-sm sm:text-base">
+                  Full Name
+                </span>
               </label>
               <input
                 type="text"
                 name="fullName"
                 value={formState.fullName}
-                onChange={(e) => setFormState({ ...formState, fullName: e.target.value })}
+                onChange={(e) =>
+                  setFormState({ ...formState, fullName: e.target.value })
+                }
                 className="input input-bordered w-full text-sm sm:text-base"
                 placeholder="Your full name"
                 maxLength={50}
@@ -111,7 +133,9 @@ const OnboardingPage = () => {
               <textarea
                 name="bio"
                 value={formState.bio}
-                onChange={(e) => setFormState({ ...formState, bio: e.target.value })}
+                onChange={(e) =>
+                  setFormState({ ...formState, bio: e.target.value })
+                }
                 className="textarea textarea-bordered h-20 sm:h-24 text-sm sm:text-base resize-none w-full overflow-hidden break-words"
                 placeholder="Tell others about yourself and your language learning goals"
                 maxLength={200}
@@ -123,12 +147,19 @@ const OnboardingPage = () => {
               {/* NATIVE LANGUAGE */}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text text-sm sm:text-base">Native Language</span>
+                  <span className="label-text text-sm sm:text-base">
+                    Native Language
+                  </span>
                 </label>
                 <select
                   name="nativeLanguage"
                   value={formState.nativeLanguage}
-                  onChange={(e) => setFormState({ ...formState, nativeLanguage: e.target.value })}
+                  onChange={(e) =>
+                    setFormState({
+                      ...formState,
+                      nativeLanguage: e.target.value,
+                    })
+                  }
                   className="select select-bordered w-full text-sm sm:text-base"
                 >
                   <option value="">Select your native language</option>
@@ -143,12 +174,19 @@ const OnboardingPage = () => {
               {/* LEARNING LANGUAGE */}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text text-sm sm:text-base">Learning Language</span>
+                  <span className="label-text text-sm sm:text-base">
+                    Learning Language
+                  </span>
                 </label>
                 <select
                   name="learningLanguage"
                   value={formState.learningLanguage}
-                  onChange={(e) => setFormState({ ...formState, learningLanguage: e.target.value })}
+                  onChange={(e) =>
+                    setFormState({
+                      ...formState,
+                      learningLanguage: e.target.value,
+                    })
+                  }
                   className="select select-bordered w-full text-sm sm:text-base"
                 >
                   <option value="">Select language you're learning</option>
@@ -164,7 +202,9 @@ const OnboardingPage = () => {
             {/* LOCATION */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-sm sm:text-base">Location</span>
+                <span className="label-text text-sm sm:text-base">
+                  Location
+                </span>
               </label>
               <div className="relative">
                 <MapPinIcon className="absolute top-1/2 transform -translate-y-1/2 left-3 w-4 h-4 sm:w-5 sm:h-5 text-base-content opacity-70" />
@@ -172,7 +212,9 @@ const OnboardingPage = () => {
                   type="text"
                   name="location"
                   value={formState.location}
-                  onChange={(e) => setFormState({ ...formState, location: e.target.value })}
+                  onChange={(e) =>
+                    setFormState({ ...formState, location: e.target.value })
+                  }
                   className="input input-bordered w-full pl-9 sm:pl-10 text-sm sm:text-base"
                   placeholder="City, Country"
                   maxLength={100}
@@ -181,15 +223,17 @@ const OnboardingPage = () => {
             </div>
 
             {/* SUBMIT BUTTON */}
-            <button 
-              className="btn btn-primary w-full mt-6 sm:mt-8 min-h-12" 
-              disabled={isPending} 
+            <button
+              className="btn btn-primary w-full mt-6 sm:mt-8 min-h-12"
+              disabled={isPending}
               type="submit"
             >
               {!isPending ? (
                 <>
                   <ShipWheelIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                  <span className="text-sm sm:text-base">Complete Onboarding</span>
+                  <span className="text-sm sm:text-base">
+                    Complete Onboarding
+                  </span>
                 </>
               ) : (
                 <>

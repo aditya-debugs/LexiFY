@@ -22,7 +22,9 @@ export default function CreateLearningGoalPage() {
   const { authUser } = useAuthUser();
 
   // Get pre-selected friend from navigation state or query params
-  const preSelectedFriendId = location.state?.friendId || new URLSearchParams(location.search).get('friendId');
+  const preSelectedFriendId =
+    location.state?.friendId ||
+    new URLSearchParams(location.search).get("friendId");
 
   useEffect(() => {
     fetchFriends();

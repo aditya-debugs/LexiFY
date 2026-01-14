@@ -18,12 +18,9 @@ export async function signup(req, res) {
 
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
     if (!usernameRegex.test(username)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Username can only contain letters, numbers, and underscores",
-        });
+      return res.status(400).json({
+        message: "Username can only contain letters, numbers, and underscores",
+      });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,18 +35,14 @@ export async function signup(req, res) {
 
     if (existingUser) {
       if (existingUser.email === email) {
-        return res
-          .status(400)
-          .json({
-            message: "Email already exists, please use a different one",
-          });
+        return res.status(400).json({
+          message: "Email already exists, please use a different one",
+        });
       }
       if (existingUser.username === username.toLowerCase()) {
-        return res
-          .status(400)
-          .json({
-            message: "Username is already taken, please choose a different one",
-          });
+        return res.status(400).json({
+          message: "Username is already taken, please choose a different one",
+        });
       }
       if (existingUser.firebaseUid === firebaseUid) {
         return res.status(400).json({ message: "User already exists" });
@@ -57,8 +50,18 @@ export async function signup(req, res) {
     }
 
     // Generate random avatar using DiceBear API
-    const avatarStyles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'lorelei', 'micah', 'personas', 'pixel-art'];
-    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    const avatarStyles = [
+      "adventurer",
+      "avataaars",
+      "bottts",
+      "fun-emoji",
+      "lorelei",
+      "micah",
+      "personas",
+      "pixel-art",
+    ];
+    const randomStyle =
+      avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
     const seed = username.toLowerCase() + Date.now();
     const randomAvatar = `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${seed}`;
 
