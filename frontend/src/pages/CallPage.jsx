@@ -97,10 +97,20 @@ const CallPage = () => {
         await client.disconnectUser();
       }
       toast.success("Call ended");
-      navigate(-1); // Go back to previous page
+
+      // Navigate back to chat
+      // callId format is: "userId1-userId2" (sorted)
+      const userIds = callId.split("-");
+      const otherUserId = userIds.find((id) => id !== authUser._id);
+
+      if (otherUserId) {
+        navigate(`/chat/${otherUserId}`);
+      } else {
+        navigate("/"); // Fallback to home
+      }
     } catch (error) {
       console.error("Error leaving call:", error);
-      navigate(-1);
+      navigate("/"); // Fallback to home on error
     }
   };
 
@@ -157,14 +167,25 @@ const CallContent = ({ onLeave }) => {
   const callingState = useCallCallingState();
   const participants = useParticipants();
   const navigate = useNavigate();
+  const { id: callId } = useParams();
+  const { authUser } = useAuthUser();
 
-  // When call ends, navigate away
+  // When call ends, navigate back to chat
   useEffect(() => {
     if (callingState === CallingState.LEFT) {
       toast.info("Call ended");
-      navigate(-1);
+
+      // Navigate back to chat
+      const userIds = callId.split("-");
+      const otherUserId = userIds.find((id) => id !== authUser?._id);
+
+      if (otherUserId) {
+        navigate(`/chat/${otherUserId}`);
+      } else {
+        navigate("/"); // Fallback to home
+      }
     }
-  }, [callingState, navigate]);
+  }, [callingState, navigate, callId, authUser]);
 
   return (
     <StreamTheme className="h-full">
