@@ -117,3 +117,50 @@ export async function translateMessage(text, targetLanguage) {
   const response = await axiosInstance.post('/translate', { text, targetLanguage });
   return response.data;
 }
+
+// ===== Learning Goals API =====
+
+export async function createLearningGoal(partnerId, duration) {
+  const response = await axiosInstance.post('/learning-goals/create', { partnerId, duration });
+  return response.data;
+}
+
+export async function getLearningGoals() {
+  const response = await axiosInstance.get('/learning-goals');
+  return response.data;
+}
+
+export async function getLearningGoalById(goalId) {
+  const response = await axiosInstance.get(`/learning-goals/${goalId}`);
+  return response.data;
+}
+
+export async function acceptLearningGoal(goalId) {
+  const response = await axiosInstance.post(`/learning-goals/${goalId}/accept`);
+  return response.data;
+}
+
+export async function declineLearningGoal(goalId) {
+  const response = await axiosInstance.post(`/learning-goals/${goalId}/decline`);
+  return response.data;
+}
+
+export async function deleteLearningGoal(goalId) {
+  const response = await axiosInstance.delete(`/learning-goals/${goalId}`);
+  return response.data;
+}
+
+export async function getDailyQuiz(goalId, day) {
+  const response = await axiosInstance.get(`/learning-goals/${goalId}/quiz/${day}`);
+  return response.data;
+}
+
+export async function submitQuiz(goalId, day, answers) {
+  const response = await axiosInstance.post(`/learning-goals/${goalId}/quiz/${day}/submit`, { answers });
+  return response.data;
+}
+
+export async function getGoalSummary(goalId) {
+  const response = await axiosInstance.get(`/learning-goals/${goalId}/summary`);
+  return response.data;
+}

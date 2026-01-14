@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import useLogout from "../hooks/useLogout";
-import { BellIcon, HomeIcon, ShipWheelIcon, UsersIcon, XIcon, LogOutIcon, PaletteIcon } from "lucide-react";
+import { BellIcon, HomeIcon, ShipWheelIcon, UsersIcon, XIcon, LogOutIcon, PaletteIcon, Target } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import { useState } from "react";
 
@@ -82,6 +82,22 @@ const Sidebar = ({ onClose }) => {
             currentPath === "/notifications" ? "text-primary" : "text-base-content opacity-70"
           }`} />
           <span>Notifications</span>
+        </Link>
+
+        <Link
+          to="/learning-goals"
+          onClick={handleLinkClick}
+          className={`btn btn-ghost justify-start w-full gap-3 px-3 py-2 sm:py-3 normal-case text-sm sm:text-base hover-lift animate-fade-in ${
+            currentPath.startsWith("/learning-goals") 
+              ? "btn-active bg-gradient-to-r from-primary/20 to-secondary/20 text-primary shadow-md" 
+              : "hover:bg-base-300 hover:shadow-md"
+          }`}
+          style={{ animationDelay: '0.35s' }}
+        >
+          <Target className={`size-4 sm:size-5 transition-colors ${
+            currentPath.startsWith("/learning-goals") ? "text-primary" : "text-base-content opacity-70"
+          }`} />
+          <span>Learning Goals</span>
         </Link>
 
         {/* Divider */}
