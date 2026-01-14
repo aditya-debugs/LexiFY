@@ -32,10 +32,10 @@ const App = () => {
 
   // Apply theme to html element for better coverage
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.body.style.backgroundColor = 'hsl(var(--b1))';
-    document.body.style.color = 'hsl(var(--bc))';
-    console.log('🎨 Theme applied:', theme);
+    document.documentElement.setAttribute("data-theme", theme);
+    document.body.style.backgroundColor = "hsl(var(--b1))";
+    document.body.style.color = "hsl(var(--bc))";
+    console.log("🎨 Theme applied:", theme);
   }, [theme]);
 
   if (isLoading) return <PageLoader />;
@@ -58,13 +58,21 @@ const App = () => {
         <Route
           path="/signup"
           element={
-            !isAuthenticated ? <SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            !isAuthenticated ? (
+              <SignUpPage />
+            ) : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            )
           }
         />
         <Route
           path="/login"
           element={
-            !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            !isAuthenticated ? (
+              <LoginPage />
+            ) : (
+              <Navigate to={isOnboarded ? "/" : "/onboarding"} />
+            )
           }
         />
         <Route
