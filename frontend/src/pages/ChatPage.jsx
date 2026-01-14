@@ -212,10 +212,12 @@ const ChatPage = () => {
       // Send custom message with call info
       channel.sendMessage({
         text: `📞 Video call started`,
-        attachments: [{
-          type: 'video_call',
-          callId: channel.id,
-        }],
+        attachments: [
+          {
+            type: "video_call",
+            callId: channel.id,
+          },
+        ],
       });
 
       toast.success("Starting video call...");

@@ -40,7 +40,8 @@ const CallPage = () => {
 
   useEffect(() => {
     const initCall = async () => {
-      if (!tokenData?.token || !authUser || !callId || hasJoined.current) return;
+      if (!tokenData?.token || !authUser || !callId || hasJoined.current)
+        return;
 
       try {
         console.log("Initializing Stream video client...");
@@ -177,8 +178,12 @@ const CallContent = ({ onLeave }) => {
                 <div className="animate-pulse mb-4">
                   <Phone className="w-16 h-16 mx-auto text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Waiting for others to join...</h2>
-                <p className="text-base-content/70">The call has started. Share the link for others to join.</p>
+                <h2 className="text-2xl font-bold mb-2">
+                  Waiting for others to join...
+                </h2>
+                <p className="text-base-content/70">
+                  The call has started. Share the link for others to join.
+                </p>
               </div>
             </div>
           ) : null}
