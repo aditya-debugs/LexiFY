@@ -1,8 +1,8 @@
 import axios from "axios";
 import { auth } from "./firebase";
 
-// Always use /api since we're serving from the same port in production
-const BASE_URL = "/api";
+// Use environment variable for API URL (supports separate frontend/backend deployments)
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
