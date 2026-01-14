@@ -13,6 +13,7 @@ import {
   MessageList,
   Thread,
   Window,
+  Avatar,
 } from "stream-chat-react";
 import { StreamChat } from "stream-chat";
 import toast from "react-hot-toast";
@@ -362,21 +363,44 @@ const ChatPage = () => {
           <Channel channel={channel}>
             <Window>
               <div className="h-full flex flex-col">
-                <div className="flex-shrink-0 bg-base-200/80 backdrop-blur-md border-b border-base-300/50 relative">
-                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 flex flex-col sm:flex-row gap-2">
-                    <button
-                      onClick={handleCreateGoal}
-                      className="btn btn-secondary btn-sm gap-1 shadow-lg transition-all hover:scale-105"
-                      title="Create Learning Goal"
-                    >
-                      <Target className="w-4 h-4" />
-                      <span className="hidden sm:inline">Start a Goal</span>
-                    </button>
-                    <CallButton handleVideoCall={handleVideoCall} />
+                {/* ✅ Custom Header (fixed layout, no Stream conflicts) */}
+                <div className="flex-shrink-0 bg-base-200/80 backdrop-blur-md border-b border-base-300/50 px-4 py-2">
+                  <div className="flex items-center justify-between">
+                    {/* Left: Channel Info */}
+                    <div className="flex items-center gap-3">
+                      <Avatar
+                        image={channel?.data?.image}
+                        name={channel?.data?.name || "Chat"}
+                        size={40}
+                      />
+                      <div>
+                        <p className="font-semibold text-base-content">
+                          {channel?.data?.name || "Chat"}
+                        </p>
+                        <p className="text-xs text-base-content/60">
+                          {Object.keys(channel?.state?.members || {}).length}{" "}
+                          members
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right: Actions */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleCreateGoal}
+                        className="btn btn-secondary btn-sm gap-1 shadow-lg transition-all hover:scale-105"
+                        title="Create Learning Goal"
+                      >
+                        <Target className="w-4 h-4" />
+                        <span className="hidden md:inline">Start a Goal</span>
+                      </button>
+
+                      <CallButton handleVideoCall={handleVideoCall} />
+                    </div>
                   </div>
-                  <ChannelHeader />
                 </div>
 
+                {/* Messages */}
                 <div
                   ref={messageListRef}
                   className="flex-1 min-h-0 overflow-hidden"
@@ -384,11 +408,13 @@ const ChatPage = () => {
                   <MessageList />
                 </div>
 
+                {/* Input */}
                 <div className="flex-shrink-0 bg-base-200/80 backdrop-blur-md border-t border-base-300/50 p-3 sm:p-4">
                   <MessageInput focus />
                 </div>
               </div>
             </Window>
+
             <Thread />
           </Channel>
         </Chat>

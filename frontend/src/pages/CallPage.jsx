@@ -29,6 +29,7 @@ const CallPage = () => {
   const [call, setCall] = useState(null);
   const [isConnecting, setIsConnecting] = useState(true);
   const hasJoined = useRef(false);
+  const hasLeft = useRef(false);
 
   const { authUser, isLoading } = useAuthUser();
 
@@ -78,22 +79,20 @@ const CallPage = () => {
 
     initCall();
 
-    // Cleanup function to leave call when component unmounts
+    // Cleanup function - don't leave call here as it's handled by handleLeaveCall
     return () => {
-      if (call && client) {
-        console.log("Leaving call and cleaning up...");
-        call.leave().catch(console.error);
-        client.disconnectUser().catch(console.error);
-      }
+      // Cleanup will be handled by navigation
     };
   }, [tokenData, authUser, callId]);
 
   const handleLeaveCall = async () => {
+    if (hasLeft.current) return; // Prevent multiple leave calls
+    hasLeft.current = true;
+
     try {
       if (call) {
         await call.leave();
       }
-      // Don't disconnect the client - it can cause auth issues
       toast.success("Call ended");
 
       // Navigate back to chat
@@ -164,26 +163,8 @@ const CallContent = ({ onLeave }) => {
   const { useCallCallingState, useParticipants } = useCallStateHooks();
   const callingState = useCallCallingState();
   const participants = useParticipants();
-  const navigate = useNavigate();
-  const { id: callId } = useParams();
-  const { authUser } = useAuthUser();
 
-  // When call ends, navigate back to chat
-  useEffect(() => {
-    if (callingState === CallingState.LEFT) {
-      toast.info("Call ended");
-
-      // Navigate back to chat
-      const userIds = callId.split("-");
-      const otherUserId = userIds.find((id) => id !== authUser?._id);
-
-      if (otherUserId) {
-        navigate(`/chat/${otherUserId}`);
-      } else {
-        navigate("/");
-      }
-    }
-  }, [callingState, navigate, callId, authUser]);
+  // Note: Navigation is handled by the onLeave callback, not here
 
   return (
     <StreamTheme className="h-full">
