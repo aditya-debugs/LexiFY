@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamToken, translateMessage } from "../lib/api";
+import { Target } from "lucide-react";
 
 import {
   Channel,
@@ -25,6 +26,7 @@ const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
 const ChatPage = () => {
   const { id: targetUserId } = useParams();
+  const navigate = useNavigate();
   const messageListRef = useRef(null);
 
   const [chatClient, setChatClient] = useState(null);
@@ -193,6 +195,10 @@ const ChatPage = () => {
     }
   };
 
+  const handleCreateGoal = () => {
+    navigate(`/learning-goals/create?friendId=${targetUserId}`);
+  };
+
   const handleTranslateMessage = async (text, messageId) => {
     const targetLanguage = authUser?.nativeLanguage || "English";
 
@@ -269,7 +275,14 @@ const ChatPage = () => {
             <Window>
               <div className="h-full flex flex-col">
                 <div className="flex-shrink-0 bg-base-200/80 backdrop-blur-md border-b border-base-300/50 relative">
-                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
+                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 flex gap-2">
+                    <button
+                      onClick={handleCreateGoal}
+                      className="btn btn-circle btn-sm bg-secondary hover:bg-secondary-focus text-secondary-content shadow-lg border-2 border-secondary transition-all hover:scale-105"
+                      title="Create Learning Goal"
+                    >
+                      <Target className="w-4 h-4" />
+                    </button>
                     <CallButton handleVideoCall={handleVideoCall} />
                   </div>
                   <ChannelHeader />

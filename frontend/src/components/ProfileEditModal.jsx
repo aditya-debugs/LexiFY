@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { updateUserProfile } from "../lib/api";
 import toast from "react-hot-toast";
-import { UserIcon } from "lucide-react";
+import { UserIcon, ShuffleIcon } from "lucide-react";
 import Portal from "./Portal";
 
 const ProfileEditModal = ({ isOpen, onClose, initialUser }) => {
@@ -76,6 +76,17 @@ const ProfileEditModal = ({ isOpen, onClose, initialUser }) => {
     updateProfileMutation(formState);
   };
 
+  const handleRandomAvatar = () => {
+    // Generate random avatar using DiceBear API
+    const avatarStyles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'lorelei', 'micah', 'personas', 'pixel-art'];
+    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    const seed = (initialUser?.username || 'user') + Date.now();
+    const randomAvatar = `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${seed}`;
+
+    setFormState({ ...formState, profilePic: randomAvatar });
+    toast.success("Random profile picture generated!");
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -144,13 +155,23 @@ const ProfileEditModal = ({ isOpen, onClose, initialUser }) => {
                 <label className="label py-1 px-0">
                   <span className="label-text font-semibold text-sm">Profile picture URL</span>
                 </label>
-                <input
-                  name="profilePic"
-                  value={formState.profilePic}
-                  onChange={handleChange}
-                  className="input input-bordered w-full text-sm h-11 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all bg-base-100 rounded-xl shadow-sm"
-                  placeholder="https://example.com/photo.jpg"
-                />
+                <div className="flex gap-2">
+                  <input
+                    name="profilePic"
+                    value={formState.profilePic}
+                    onChange={handleChange}
+                    className="input input-bordered w-full text-sm h-11 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/30 transition-all bg-base-100 rounded-xl shadow-sm"
+                    placeholder="https://example.com/photo.jpg"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRandomAvatar}
+                    className="btn btn-accent btn-sm h-11 flex-shrink-0"
+                    title="Generate Random Avatar"
+                  >
+                    <ShuffleIcon className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
               <div className="sm:col-span-2 animate-fade-in" style={{ animationDelay: '0.3s' }}>
