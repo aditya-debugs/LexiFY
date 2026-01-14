@@ -209,9 +209,13 @@ const ChatPage = () => {
       // Navigate to call page directly
       navigate(callUrl);
 
-      // Also send message in chat
+      // Send custom message with call info
       channel.sendMessage({
-        text: `📞 Video call started. Click to join: ${window.location.origin}${callUrl}`,
+        text: `📞 Video call started`,
+        attachments: [{
+          type: 'video_call',
+          callId: channel.id,
+        }],
       });
 
       toast.success("Starting video call...");
